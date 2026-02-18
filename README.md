@@ -1,2 +1,4 @@
-# BCube
-A fork of Round Cuby with Biji Flavour
+BCube
+=================
+fork of [roundcube.net](https://roundcube.net)
+
