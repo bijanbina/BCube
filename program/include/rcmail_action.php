@@ -1279,17 +1279,21 @@ abstract class rcmail_action
                 'title'   => $title,
             ];
 
+            // Build content for li tag: treetoggle first, then link
+            $li_content = '';
+            if( !empty($folder['folders']) )
+            {
+                $li_content .= html::div('treetoggle ' . ($is_collapsed ? 'collapsed' : 'expanded'), '&nbsp;');
+            }
+            $li_content .= html::a($link_attrib, $html_name);
+
             $out .= html::tag('li', [
                     'id'      => "rcmli" . $folder_id,
                     'class'   => implode(' ', $classes),
                     'noclose' => true
                 ],
-                html::a($link_attrib, $html_name)
+                $li_content
             );
-
-            if (!empty($folder['folders'])) {
-                $out .= html::div('treetoggle ' . ($is_collapsed ? 'collapsed' : 'expanded'), '&nbsp;');
-            }
 
             $jslist[$folder['id']] = [
                 'id'      => $folder['id'],

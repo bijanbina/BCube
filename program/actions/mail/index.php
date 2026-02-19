@@ -358,39 +358,15 @@ class rcmail_action_mail_index extends rcmail_action
             $attrib['id'] = 'rcubemessagelist';
         }
 
-        // define list of cols to be displayed based on parameter or config
-        if (empty($attrib['columns'])) {
-            $list_cols   = $rcmail->config->get('list_cols');
-            $a_show_cols = !empty($list_cols) && is_array($list_cols) ? $list_cols : ['subject'];
-
-            $rcmail->output->set_env('col_movable', !in_array('list_cols', (array) $rcmail->config->get('dont_override')));
-        }
-        else {
-            $a_show_cols = preg_split('/[\s,;]+/', str_replace(["'", '"'], '', $attrib['columns']));
-            $attrib['columns'] = $a_show_cols;
-        }
-
-        // save some variables for use in ajax list
-        $_SESSION['list_attrib'] = $attrib;
-
-        // make sure 'threads' and 'subject' columns are present
-        if (!in_array('subject', $a_show_cols)) {
-            array_unshift($a_show_cols, 'subject');
-        }
-        if (!in_array('threads', $a_show_cols)) {
-            array_unshift($a_show_cols, 'threads');
-        }
-
-        $listcols = $a_show_cols;
+        $listcols = $rcmail->config->get('list_cols');
 
         // set client env
         $rcmail->output->add_gui_object('messagelist', $attrib['id']);
         $rcmail->output->set_env('autoexpand_threads', intval($rcmail->config->get('autoexpand_threads')));
-        $rcmail->output->set_env('sort_col', $_SESSION['sort_col']);
+        //$rcmail->output->set_env('sort_col', $_SESSION['sort_col']);
         $rcmail->output->set_env('sort_order', $_SESSION['sort_order']);
         $rcmail->output->set_env('messages', []);
-        $rcmail->output->set_env('listcols', $listcols);
-        $rcmail->output->set_env('listcols_widescreen', ['threads', 'subject', 'fromto', 'date', 'size', 'flag', 'attachment']);
+        $rcmail->output->set_env('listcols_widescreen', ['fromto', 'threads', 'date', 'size', 'flag', 'attachment', 'subject']);
 
         $rcmail->output->include_script('list.js');
 
@@ -539,7 +515,7 @@ class rcmail_action_mail_index extends rcmail_action
                     $cont = self::show_bytes($header->size);
                 }
                 else if ($col == 'date') {
-                    $cont = $rcmail->format_date($sort_col == 'arrival' ? $header->internaldate : $header->date);
+                    $cont = $rcmail->format_date($header->internaldate);
                 }
                 else if ($col == 'folder') {
                     if (!isset($last_folder) || !isset($last_folder_name) || $last_folder !== $header->folder) {
@@ -1189,11 +1165,7 @@ class rcmail_action_mail_index extends rcmail_action
                     $style[$idx] = $idx . ': ' . $val;
                 }
 
-                if (isset($attrs['style'])) {
-                    $attrs['style'] = trim($attrs['style'], '; ') . '; ' . implode('; ', $style);
-                } else {
-                    $attrs['style'] = implode('; ', $style);
-                }
+                $attrs['style'] = ($attrs['style'] ? trim($attrs['style'], ';') . '; ' : '') . implode('; ', $style);
             }
 
             $out = html::tag('div', $attrs, $content);

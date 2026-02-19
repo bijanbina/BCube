@@ -257,7 +257,7 @@ function rcube_webmail()
 
           this.env.widescreen_list_template = [
             {className: 'threads', cells: ['threads']},
-            {className: 'subject', cells: ['fromto', 'date', 'size', 'status', 'subject']},
+            {className: 'subject', cells: ['fromto', 'subject', 'date', 'size', 'status']},
             {className: 'flags', cells: ['flag', 'attachment']}
           ];
 
@@ -2420,9 +2420,12 @@ function rcube_webmail()
 
       if (this.className) domcell.className = this.className;
 
-      for (i=0; this.cells && i < this.cells.length; i++) {
-        for (n=0; row.cols && n < row.cols.length; n++) {
-          if (this.cells[i] == row.cols[n].className) {
+      for (i=0; this.cells && i < this.cells.length; i++) 
+      {
+        for (n=0; row.cols && n < row.cols.length; n++)
+        {
+          if (this.cells[i] == row.cols[n].className)
+          {
             col = row.cols[n];
             domcol = document.createElement('span');
             domcol.className = this.cells[i];
@@ -7584,9 +7587,9 @@ function rcube_webmail()
         parent = this.subscription_list.get_item(parent, true);
 
         // add required tree elements to the parent if not already there
-        if (!$('div.treetoggle', parent).length) {
-          $('<div>&nbsp;</div>').addClass('treetoggle collapsed').appendTo(parent);
-        }
+        //if (!$('div.treetoggle', parent).length) {
+        //  $('<div>&nbsp;</div>').addClass('treetoggle collapsed').appendTo(parent);
+        //}
         if (!$('ul', parent).length) {
           $('<ul>').css('display', 'none').appendTo(parent);
         }

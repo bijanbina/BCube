@@ -1658,13 +1658,13 @@ class rcmail extends rcube
 
             if ($pretty_date && $timestamp > $today_limit && $timestamp <= $now) {
                 $format = $this->config->get('date_today', $this->config->get('time_format', 'H:i'));
-                $today  = true;
+                $today  = false;
             }
             else if ($pretty_date && $timestamp > $week_limit && $timestamp <= $now) {
-                $format = $this->config->get('date_short', 'D H:i');
+                $format = 'D';
             }
             else {
-                $format = $this->config->get('date_long', 'Y-m-d H:i');
+                $format = 'm-d';
             }
         }
 
